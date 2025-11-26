@@ -193,14 +193,14 @@ export const createGroupTemplate = (diagram, callbacks) => {
           $("Button",
             { toolTip: $("ToolTip", $(go.TextBlock, "Edit Group")) },
             { click: (_, obj) => handleEditNode(obj.part.adornedPart) },
-            $(go.TextBlock, "✏️", { margin: 4 })
+            $(go.TextBlock, "✏️", { margin: 4, font: "14px sans-serif" })
           ),
 
           // DELETE
           $("Button",
             { toolTip: $("ToolTip", $(go.TextBlock, "Delete Group")) },
             { click: (_, obj) => handleDeleteNode(obj.part.adornedPart) },
-            $(go.TextBlock, "🗑", { margin: 4 })
+            $(go.TextBlock, "🗑", { margin: 4, font: "14px sans-serif" })
           ),
 
           // COLLAPSE / EXPAND
@@ -224,9 +224,9 @@ export const createGroupTemplate = (diagram, callbacks) => {
                 console.log("STATE UPDATED:", g.data.isSubGraphExpanded);
               }
             },
-            $(go.TextBlock,
+            $(go.TextBlock,{ margin: 4, font: "14px sans-serif" },
               new go.Binding("text", "isSubGraphExpanded",
-                exp => (exp ? "Collapse" : "Expand"))
+                exp => (exp ? "🔼" : "🔽"))
             )
           ),
 
