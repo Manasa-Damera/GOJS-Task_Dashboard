@@ -95,11 +95,13 @@ export const createGroupTemplate = (diagram, callbacks) => {
       mouseDragLeave: (_, grp) => (grp.isHighlighted = false)
     },
 
+    new go.Binding("resizable", "isSubGraphExpanded"),
     // Bind location
     new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
 
     // PURE one-field expand binding (important)
     new go.Binding("isSubGraphExpanded").makeTwoWay(),
+    
 
     // SHAPE
     $(
@@ -112,6 +114,7 @@ export const createGroupTemplate = (diagram, callbacks) => {
         strokeWidth: 2,
         parameter1: 10
       },
+
       new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify)
     ),
 
