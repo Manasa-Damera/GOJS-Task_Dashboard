@@ -144,7 +144,29 @@ export const createGroupTemplate = (diagram, callbacks) => {
         new go.Binding("text", "", (_, obj) => {
           const group = obj.part;
           const nodes = group.memberParts.filter(p => p instanceof go.Node).count;
-          return `Nodes: ${nodes}`;
+          let incoming = 0;
+          let outgoing = 0;
+          group.memberParts.each(member => {
+                if (!(member instanceof go.Node)) return;
+
+                // Check all links connected to this node
+                member.findLinksConnected().each(link => {
+                  const fromNode = link.fromNode;
+                  const toNode = link.toNode;
+
+                  const fromInside = fromNode?.containingGroup === group;
+                  const toInside = toNode?.containingGroup === group;
+
+                  // Incoming: from outside → inside
+                  if (!fromInside && toInside) incoming++;
+
+                  // Outgoing: inside → outside
+                  if (fromInside && !toInside) outgoing++;
+                });
+              });
+          return `Nodes: ${nodes} 
+                  Total Links: ${incoming + outgoing} 
+                  (In: ${incoming}, Out: ${outgoing})`;
         })
       )
     ),

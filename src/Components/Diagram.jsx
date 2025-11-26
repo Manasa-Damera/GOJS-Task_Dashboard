@@ -89,7 +89,6 @@ const Diagram = () => {
       "animationManager.isEnabled": false,
       initialContentAlignment: go.Spot.TopLeft,
       padding: 20,
-      // layout: $(go.LayeredDigraphLayout, { direction: 90, layerSpacing: 50 }),
     });
 
     // Templates
@@ -294,43 +293,79 @@ const Diagram = () => {
         </div>
       )}
 
-      {/* Link Editor Modal */}
+      {/* Link Editing */}
       {editingLink && (
         <div className="modal link-editor">
           <div className="modal-content">
-            <h2>Edit Link</h2>
+            <h2>Edit Link Style</h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 const diagram = myDiagramRef.current;
                 if (!diagram) return;
                 diagram.startTransaction("updateLink");
-                Object.entries(linkFormData).forEach(([k, v]) =>
-                  diagram.model.setDataProperty(editingLink, k, v)
-                );
+                Object.entries(linkFormData).forEach(([key, val]) => diagram.model.setDataProperty(editingLink, key, val));
                 diagram.commitTransaction("updateLink");
                 setEditingLink(null);
               }}
             >
-              {/* ... all your select/color inputs ... */}
+              <div className="form-row">
+                <label>Routing:</label>
+                <select value={linkFormData.routing} onChange={(e) => setLinkFormData({ ...linkFormData, routing: e.target.value })}>
+                  <option value="Normal">Normal</option>
+                  <option value="Orthogonal">Orthogonal</option>
+                  <option value="AvoidsNodes">Avoids Nodes</option>
+                </select>
+              </div>
+
+              <div className="form-row">
+                <label>Curve:</label>
+                <select value={linkFormData.curve} onChange={(e) => setLinkFormData({ ...linkFormData, curve: e.target.value })}>
+                  <option value="None">None</option>
+                  <option value="Bezier">Bezier</option>
+                  <option value="JumpOver">Jump Over</option>
+                </select>
+              </div>
+
+              <div className="form-row">
+                <label>Arrow Style:</label>
+                <select value={linkFormData.arrow} onChange={(e) => setLinkFormData({ ...linkFormData, arrow: e.target.value })}>
+                  <option value="Standard">Standard</option>
+                  <option value="Triangle">Triangle</option>
+                  <option value="Circle">Circle</option>
+                  <option value="DoubleTriangle">Double Triangle</option>
+                  <option value="Backward">Backward</option>
+                  <option value="OpenTriangle">Open Triangle</option>
+                </select>
+              </div>
+
+              <div className="form-row">
+                <label>Color:</label>
+                <input type="color" value={linkFormData.color} onChange={(e) => setLinkFormData({ ...linkFormData, color: e.target.value })} />
+              </div>
+
+              <div className="form-row">
+                <label>Label:</label>
+                <input type="text" placeholder="Enter link label" value={linkFormData.label} onChange={(e) => setLinkFormData({ ...linkFormData, label: e.target.value })} />
+              </div>
+
               <div className="button-row">
                 <button type="submit" className="btn save">Save</button>
-                <button type="button" className="btn cancel" onClick={() => setEditingLink(null)}>
-                  Cancel
-                </button>
+                <button type="button" className="btn cancel" onClick={() => setEditingLink(null)}>Cancel</button>
                 <button
                   type="button"
                   className="btn delete"
-                  style={{ backgroundColor: "#d32f2f" }}
+                  style={{ backgroundColor: "red" }}
                   onClick={() => {
                     const diagram = myDiagramRef.current;
                     if (!diagram) return;
-                    const link = diagram.findLinkForData(editingLink);
-                    if (link) diagram.remove(link);
+                    diagram.startTransaction("deleteLink");
+                    diagram.remove(diagram.findLinkForData(editingLink));
+                    diagram.commitTransaction("deleteLink");
                     setEditingLink(null);
                   }}
                 >
-                  Delete Link
+                  Delete
                 </button>
               </div>
             </form>
