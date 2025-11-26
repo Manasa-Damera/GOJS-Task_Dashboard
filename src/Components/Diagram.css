@@ -1,0 +1,271 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar section */
+.sidebar {
+  width: 220px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Sidebar nodes */
+.sidebar-node {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: grab;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.sidebar-node:hover {
+  background: #e6f0ff;
+  border-color: #007bff;
+}
+
+/* Save button in sidebar */
+.save-btn {
+  margin-top: auto;
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+}
+
+/* Diagram area */
+.diagram-area {
+  flex: 1;
+  position: relative;
+  background: #fafafa;
+  border-left: 1px solid #ddd;
+}
+
+/* Modal overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 10px;
+}
+
+/* Modal content */
+.modal form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal h3 {
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.modal label {
+  font-weight: 500;
+}
+
+.modal input,
+.modal textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal textarea {
+  resize: vertical;
+  min-height: 60px;
+  max-height: 150px;
+}
+
+.modal button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+  transition: background 0.2s ease;
+}
+
+.modal button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.modal button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.modal button[type="button"] {
+  background-color: #ccc;
+}
+
+.modal button[type="button"]:hover {
+  background-color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .modal form {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  .modal input,
+  .modal textarea {
+    font-size: 13px;
+  }
+
+  .modal button {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
+/* Modal Base */
+.modal.link-editor {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 20, 20, 0.55);
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  padding: 24px 28px;
+  font-family: "Inter", sans-serif;
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Form Layout */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.form-row label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.form-row select,
+.form-row input[type="text"],
+.form-row input[type="color"] {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-row select:focus,
+.form-row input:focus {
+  border-color: #007bff;
+}
+
+/* Buttons */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  flex: 1;
+  margin: 0 5px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+
+.btn.save {
+  background-color: #007bff;
+}
+
+.btn.cancel {
+  background-color: #6c757d;
+}
+
+.btn.delete {
+  background-color: #dc3545;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(25px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

@@ -1,0 +1,24 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+.sidebar {
+  width: 180px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+.draggable-node {
+  margin: 10px 0;
+  padding: 10px;
+  cursor: grab;
+  text-align: center;
+  border-radius: 8px;
+  background: #eee;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.draggable-node:hover {
+  background: #ddd;
+}
+
