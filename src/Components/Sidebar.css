@@ -22,3 +22,27 @@
   background: #ddd;
 }
 
+.layout-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.layout-btn {
+  padding: 8px 16px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.layout-btn:hover {
+  background: #3b7bc0;
+}
+
+.layout-btn:active {
+  transform: scale(0.95);
+}

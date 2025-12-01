@@ -4,6 +4,7 @@ import * as go from "gojs";
 export const createGroupTemplate = (diagram, callbacks) => {
   const $ = go.GraphObject.make;
   const { handleEditNode, handleDeleteNode } = callbacks;
+  
 
   return $(
     go.Group,
@@ -16,9 +17,6 @@ export const createGroupTemplate = (diagram, callbacks) => {
       resizable: true,
       resizeObjectName: "SHAPE",
       minSize: new go.Size(200, 100),
-      
-
-      // PURE expand/collapse state (saved in model)
       isSubGraphExpanded: false,
 
       subGraphExpandedChanged: (group) => {
@@ -41,7 +39,7 @@ export const createGroupTemplate = (diagram, callbacks) => {
           );
 
           // Set collapsed size
-          const collapsed = new go.Size(200, 100);
+          const collapsed = new go.Size(250, 150);
           shape.desiredSize = collapsed;
           model.setDataProperty(group.data, "size", go.Size.stringify(collapsed));
 
@@ -125,14 +123,17 @@ export const createGroupTemplate = (diagram, callbacks) => {
       { alignment: go.Spot.Top, margin: 10 },
 
       $(go.TextBlock,
-        { font: "bold 13px sans-serif", editable: true, margin: new go.Margin(6, 0, 4, 0) },
+        { font: "bold 14px sans-serif", editable: true, margin: new go.Margin(6, 0, 4, 0) },
         new go.Binding("text").makeTwoWay()
       ),
 
       $(go.TextBlock,
-        { font: "11px sans-serif", stroke: "#555", editable: true, wrap: go.TextBlock.WrapFit, width: 120 },
+        { font: "bold 12px sans-serif",margin:4, stroke: "#555", editable: true, wrap: go.TextBlock.WrapFit, width: 120 },
         new go.Binding("text", "description").makeTwoWay()
-      ),
+      ).set({
+          overflow: go.TextOverflow.Ellipsis,
+          maxLines: 1
+        }),
 
       // count when collapsed
       $(
