@@ -20,6 +20,7 @@ const Diagram = () => {
   const [showSaveForm, setShowSaveForm] = useState(false);
   const [saveFormData, setSaveFormData] = useState({ flowName: "", flowDescription: "" });
   const [editingLink, setEditingLink] = useState(null);
+  const [layoutDirection, setLayoutDirection] = useState("Horizontal");
   const [linkFormData, setLinkFormData] = useState({
     routing: "Normal",
     curve: "None",
@@ -86,8 +87,9 @@ const Diagram = () => {
     const $ = go.GraphObject.make;
     const diagram = $(go.Diagram, diagramRef.current, {
       "undoManager.isEnabled": true,
-      "animationManager.isEnabled": false,
+      "animationManager.isEnabled": true,
       initialContentAlignment: go.Spot.TopLeft,
+      "animationManager.duration": 800,
       padding: 20,
     });
 
@@ -198,6 +200,29 @@ const Diagram = () => {
       // No extra updateTargetBindings needed — GoJS handles isSubGraphExpanded perfectly
     }
   }, [id]);
+  const applyLayout = useCallback(()=>{
+    const diagram = myDiagramRef.current;
+    if (!diagram) return;
+    diagram.startTransaction("Change layout");
+    if(layoutDirection==="Horizontal"){
+      diagram.layout = new go.TreeLayout({
+        angle :0,
+        layerSpacing: 50,
+      })
+    } else {
+      diagram.layout = new go.TreeLayout({
+        angle :90,
+        layerSpacing: 50,
+      })
+    }
+    diagram.layoutDiagram(true);
+    diagram.commitTransaction("Change layout");
+     
+  },[layoutDirection]);
+
+  useEffect(()=>{
+    applyLayout();
+  },[layoutDirection,applyLayout]);
 
   // === Save Flow ===
   const saveOrUpdateFlow = (flow) => {
@@ -240,7 +265,7 @@ const Diagram = () => {
 
   return (
     <div className="container">
-      <Sidebar onSave={() => setShowSaveForm(true)} id={id} />
+      <Sidebar onSave={() => setShowSaveForm(true)} id={id} onToggleLayout={(layout) => setLayoutDirection(layout)}/>
       <div ref={diagramRef} className="diagram-area" />
 
       {/* Node Edit Modal */}
