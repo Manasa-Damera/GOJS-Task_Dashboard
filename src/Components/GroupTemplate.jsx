@@ -1,4 +1,3 @@
-// src/components/diagram/templates/GroupTemplate.jsx
 import * as go from "gojs";
 
 export const createGroupTemplate = (diagram, callbacks) => {

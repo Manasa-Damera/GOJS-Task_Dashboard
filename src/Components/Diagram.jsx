@@ -9,6 +9,7 @@ import { createNodeTemplate } from "./NodeTemplate";
 import { createLinkTemplate } from "./LinkTemplate";
 
 const Diagram = () => {
+  const $ = go.GraphObject.make;
   const diagramRef = useRef(null);
   const myDiagramRef = useRef(null);
   const { id } = useParams();
@@ -20,7 +21,7 @@ const Diagram = () => {
   const [showSaveForm, setShowSaveForm] = useState(false);
   const [saveFormData, setSaveFormData] = useState({ flowName: "", flowDescription: "" });
   const [editingLink, setEditingLink] = useState(null);
-  const [layoutDirection, setLayoutDirection] = useState("Horizontal");
+  // const [layoutDirection, setLayoutDirection] = useState("Horizontal");
   const [linkFormData, setLinkFormData] = useState({
     routing: "Normal",
     curve: "None",
@@ -32,7 +33,6 @@ const Diagram = () => {
 
   // === Port Creation ===
   const makePort = useCallback((name, spot, output, input) => {
-    const $ = go.GraphObject.make;
     return $(
       go.Shape,
       "Circle",
@@ -91,6 +91,7 @@ const Diagram = () => {
       initialContentAlignment: go.Spot.TopLeft,
       "animationManager.duration": 800,
       padding: 20,
+      layout:new go.Layout({isInitial: false,isOngoing:false}),
     });
 
     // Templates
@@ -200,31 +201,83 @@ const Diagram = () => {
       // No extra updateTargetBindings needed — GoJS handles isSubGraphExpanded perfectly
     }
   }, [id]);
-  const applyLayout = useCallback(()=>{
-    const diagram = myDiagramRef.current;
-    if (!diagram) return;
-    diagram.startTransaction("Change layout");
-    if(layoutDirection==="Horizontal"){
-      diagram.layout = new go.TreeLayout({
-        angle :0,
-        layerSpacing: 50,
-      })
-    } else {
-      diagram.layout = new go.TreeLayout({
-        angle :90,
-        layerSpacing: 50,
-      })
-    }
-    diagram.layoutDiagram(true);
-    diagram.commitTransaction("Change layout");
+  // const applyLayout = useCallback(()=>{
+  //   const diagram = myDiagramRef.current;
+  //   if (!diagram) return;
+  //   diagram.startTransaction("Change layout");
+  //   if(layoutDirection==="Horizontal"){
+  //     diagram.layout = new go.TreeLayout({
+  //       angle :0,
+  //       layerSpacing: 50,
+  //     })
+  //   } else {
+  //     diagram.layout = new go.TreeLayout({
+  //       angle :90,
+  //       layerSpacing: 50,
+  //     })
+  //   }
+  //   diagram.layoutDiagram(true);
+  //   diagram.commitTransaction("Change layout");
      
-  },[layoutDirection]);
+  // },[layoutDirection]);
 
-  useEffect(()=>{
-    applyLayout();
-  },[layoutDirection,applyLayout]);
+  // useEffect(()=>{
+  //   applyLayout();
+  // },[layoutDirection,applyLayout]);
 
   // === Save Flow ===
+  
+  const applyHorizontalLayout=()=>{
+    const diagram = myDiagramRef.current;
+    if(!diagram) return;
+
+    diagram.startTransaction("horizontal-layout");
+    diagram.layout=$(go.TreeLayout,{
+      angle:0,
+      layerSpacing:60,
+      arrangement:go.TreeLayout.ArrangementFixedRoots
+    });
+
+    diagram.nodes.each(node=>{
+      if(node instanceof go.Group){
+        node.layout=$(go.TreeLayout,{
+          angle:0,
+          layerSpacing:60,
+          arrangement:go.TreeLayout.ArrangementFixedRoots
+        })
+      node.layout.invalidateLayout();
+      }
+    })
+    diagram.layoutDiagram(true);
+    diagram.commitTransaction("horizontal-layout");
+  };
+
+  const applyVerticalLayout=()=>{
+    const diagram=myDiagramRef.current;
+    if(!diagram) return;
+
+    diagram.startTransaction("vertical-layout");
+
+    diagram.layout =$(go.TreeLayout,{
+      angle:90,
+      layerSpacing:60,
+      arrangement:go.TreeLayout.ArrangementFixedRoots
+    });
+
+    diagram.nodes.each(node=>{
+      if(node instanceof go.Group){
+        node.layout=$(go.TreeLayout,{
+          angle:90,
+          layerSpacing:60,
+          arrangement:go.TreeLayout.ArrangementFixedRoots
+        })
+        node.layout.invalidateLayout();
+      }
+    })
+    diagram.layoutDiagram(true);
+    diagram.commitTransaction("vertical-layout");
+  }
+
   const saveOrUpdateFlow = (flow) => {
     let flows = JSON.parse(localStorage.getItem("Flows") || "[]");
     flows = flows.filter((f) => f.id !== flow.id);
@@ -265,7 +318,10 @@ const Diagram = () => {
 
   return (
     <div className="container">
-      <Sidebar onSave={() => setShowSaveForm(true)} id={id} onToggleLayout={(layout) => setLayoutDirection(layout)}/>
+      <Sidebar onSave={() => setShowSaveForm(true)} id={id} 
+      onHorizontal={applyHorizontalLayout}
+      onVertical={applyVerticalLayout}
+      />
       <div ref={diagramRef} className="diagram-area" />
 
       {/* Node Edit Modal */}

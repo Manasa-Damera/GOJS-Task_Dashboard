@@ -1,4 +1,3 @@
-// src/components/diagram/templates/LinkTemplate.jsx
 import * as go from "gojs";
 
 export const createLinkTemplate = (handleLinkClick) => {

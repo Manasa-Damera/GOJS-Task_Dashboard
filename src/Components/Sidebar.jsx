@@ -8,7 +8,7 @@ const nodeTypes = [
   {type: "Group", text: "Group Node" },
 ];
 
-const Sidebar = ({onSave,id,onToggleLayout}) => {
+const Sidebar = ({onSave,id,onHorizontal,onVertical}) => {
   const handleDragStart = (e, nodeData) => {
     // console.log("nodeData", nodeData);
     e.dataTransfer.setData("application/my-node", JSON.stringify(nodeData));
@@ -31,8 +31,8 @@ const Sidebar = ({onSave,id,onToggleLayout}) => {
       <div>
         <h2>Layout</h2>
         <div className="layout-buttons">
-          <button onClick={() => onToggleLayout("Horizontal")} className="layout-btn">Horizontal</button>
-          <button onClick={() => onToggleLayout("Vertical")} className="layout-btn">Vertical</button>
+          <button onClick={onHorizontal} className="layout-btn">Horizontal</button>
+          <button onClick={onVertical} className="layout-btn">Vertical</button>
         </div>
 
         

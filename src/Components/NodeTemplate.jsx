@@ -1,4 +1,3 @@
-// src/components/diagram/templates/NodeTemplate.jsx
 import * as go from "gojs";
 
 export const createNodeTemplate = (makePort, handleEditNode, handleDeleteNode) => {
